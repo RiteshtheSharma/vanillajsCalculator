@@ -12,20 +12,41 @@ body{
 } 
 .main > * {
   width: 100%;
+  border:10px solid white;
+  box-sizing: border-box;
 } 
 .display{
     background-color: #b2b9b3;
-    padding: 20px 30px;
-    border:10px solid white;
-    box-sizing: border-box;
+    padding: 1vw 3vh;
+   
+   
 } 
 
-
-
+/* button */
+button {
+ width:calc( ( 100vw - 6em - 40px ) / 4 );
+ height : calc( ( 94vh - 10em - 140px  ) / 4 );
+ border:2px solid white;
+}
 
 /* fonts */
 .display_font{
     font-size: 4em;
     font-weight: 900;
     font-family:monospace;
+} 
+
+/* flex classes */
+.f-r{
+display: flex;
+flex-wrap: wrap;
+justify-content: space-between;
+align-content: space-evenly;
+
+}  
+
+.f-r > * {
+    flex:auto ;
+    
 }
+
