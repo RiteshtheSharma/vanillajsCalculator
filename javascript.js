@@ -69,6 +69,13 @@ return "0"}
   document.querySelector(".display").textContent = display;
 return display;
 };
+const Calculate = ()=>{
+    calculatorObject.operand2 = Number(Display);
+    calculatorObject.operation();
+    calculatorObject.operator = "=";
+    Display = "" + calculatorObject.operation();
+    Display=DisplayOnConsole(Display);
+}
 document.querySelector(".container.f-r").addEventListener("click", (e) => {
   if (e.target.classList.contains("btn_display")) {
     switch (e.target.textContent) {
@@ -130,6 +137,11 @@ document.querySelector(".container.f-r").addEventListener("click", (e) => {
       case "*":
       case "-":
       case "+":
+        if(calculatorObject.isArithmetic())
+        {calculatorObject.operand2 = Number(Display);
+            Display=calculatorObject.operation();
+        calculatorObject.operator = "=";
+        Display=DisplayOnConsole(Display);}
         calculatorObject.operator = e.target.textContent;
         calculatorObject.operand1 = Number(Display);
     }
