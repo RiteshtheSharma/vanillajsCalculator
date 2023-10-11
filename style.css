@@ -9,4 +9,23 @@ body{
 .main{
     width:calc( 100% - 6em );
    border: 3em double black;
+} 
+.main > * {
+  width: 100%;
+} 
+.display{
+    background-color: #b2b9b3;
+    padding: 20px 30px;
+    border:10px solid white;
+    box-sizing: border-box;
+} 
+
+
+
+
+/* fonts */
+.display_font{
+    font-size: 4em;
+    font-weight: 900;
+    font-family:monospace;
 }
