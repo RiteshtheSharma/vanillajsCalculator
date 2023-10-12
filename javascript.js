@@ -55,11 +55,14 @@ let calculatorObject = {
 };
 let Display = "0";
 let nextOperator=null;
-
+const MAX_PRECISION = 9;
 const isNumber = (str) =>
-  Number(str) <= Number.MAX_SAFE_INTEGER &&
-  (str.indexOf(".") === -1 ||
-  str.split(".")[1].length <= 9);
+  Number(str) <= Number.MAX_SAFE_INTEGER ;
+const maintainMaxPrecision =(str)=>{
+if(str.indexOf('.') >-1 && str.split('.')[1].length >MAX_PRECISION)
+return str.split('.')[0]+'.'+str.split('.')[1].slice(0,9);
+return str
+}  
 const DisplayOnConsole = (display) => {
   if (display === "Infinity" || display === "NaN") {
     document.querySelector(".display").textContent = "Math Error";
@@ -89,7 +92,7 @@ document.querySelector(".container.f-r").addEventListener("click", (e) => {
       case "9":
         
         if (isNumber(Display + e.target.textContent)) {
-          Display = (Display === "0" ? "" : Display) + e.target.textContent;
+          Display = maintainMaxPrecision((Display === "0" ? "" : Display) + e.target.textContent);
           DisplayOnConsole(Display);
         }
 
