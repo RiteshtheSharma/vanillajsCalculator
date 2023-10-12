@@ -2,82 +2,78 @@ let calculatorObject = {
   operand1: null,
   operand2: null,
   operator: null,
-  sum: function() {
+  sum: function () {
     this.operand1 = this.operand1 + this.operand2;
     return this.operand1;
   },
-  diff: function(){
+  diff: function () {
     this.operand1 = this.operand1 - this.operand2;
     return this.operand1;
   },
-  mul: function() {
+  mul: function () {
     this.operand1 = this.operand1 * this.operand2;
     return this.operand1;
   },
-  mod: function() {
+  mod: function () {
     this.operand1 = this.operand1 % this.operand2;
     return this.operand1;
   },
-  div: function() {
+  div: function () {
     this.operand1 = this.operand1 / this.operand2;
     return this.operand1;
   },
-  destruct: function() {
+  destruct: function () {
     this.operand1 = null;
     this.operand2 = null;
     this.operator = null;
   },
-  operation: function()  {
+  operation: function () {
+    let result;
     switch (this.operator) {
       case "+":
-        return this.sum();
+        result = this.sum();
         break;
       case "-":
-        return this.diff();
+        result = this.diff();
         break;
       case "*":
-        return this.mul();
+        result = this.mul();
         break;
       case "%":
-        return this.mod();
+        result = this.mod();
         break;
-        case "/":
-            return this.div();
-            break;
-      case "AC":
-        this.destruct();
+      case "/":
+        result = this.div();
         break;
-      case "=":
-        return this.operand1;
-        break;
+
       default:
         break;
     }
+    
+    return result;
   },
-  isArithmetic:function(){
-     return '+-/%*'.indexOf(this .operator) > -1;
-  }
 };
 let Display = "0";
+let nextOperator=null;
 
-const isNumber = (str) => Number(str) <= Number.MAX_SAFE_INTEGER &&
-(Display.indexOf(".") === -1 ||
-  (Display +e.target.textContent).split(".")[1].length <= 9);
+const isNumber = (str) =>
+  Number(str) <= Number.MAX_SAFE_INTEGER &&
+  (str.indexOf(".") === -1 ||
+  str.split(".")[1].length <= 9);
 const DisplayOnConsole = (display) => {
-    if(display ==="Infinity" || display ==="NaN")
-    {document.querySelector(".display").textContent = "Math Error"
-return "0"}
-    else 
-  document.querySelector(".display").textContent = display;
-return display;
+  if (display === "Infinity" || display === "NaN") {
+    document.querySelector(".display").textContent = "Math Error";
+    return "0";
+  } else document.querySelector(".display").textContent = display;
+  return display;
 };
-const Calculate = ()=>{
-    calculatorObject.operand2 = Number(Display);
-    calculatorObject.operation();
-    calculatorObject.operator = "=";
-    Display = "" + calculatorObject.operation();
-    Display=DisplayOnConsole(Display);
-}
+const Calculate = () => {
+  calculatorObject.operand2 = Number(Display);
+  calculatorObject.operation();
+  calculatorObject.operator = "=";
+  Display = "" + calculatorObject.operation();
+  Display = DisplayOnConsole(Display);
+};
 document.querySelector(".container.f-r").addEventListener("click", (e) => {
   if (e.target.classList.contains("btn_display")) {
     switch (e.target.textContent) {
@@ -91,59 +87,68 @@ document.querySelector(".container.f-r").addEventListener("click", (e) => {
       case "7":
       case "8":
       case "9":
-       
-        if(calculatorObject.isArithmetic() )
-        Display='0';
-
-        if (
-          isNumber(Display + e.target.textContent) 
-        ) {
+        
+        if (isNumber(Display + e.target.textContent)) {
           Display = (Display === "0" ? "" : Display) + e.target.textContent;
           DisplayOnConsole(Display);
         }
-        
+
         break;
       case ".":
         Display = Display + (Display.indexOf(".") === -1 ? "." : "");
         DisplayOnConsole(Display);
         break;
       case "AC":
-        calculatorObject.operator = "AC";
-        calculatorObject.operation();
         Display = "0";
         DisplayOnConsole(Display);
         calculatorObject.destruct();
+        nextOperator=null;
         break;
 
       case "DEL":
-        if (Display !== "0" || Display.length > 0)
-          {Display = Display.slice(0, -1);
-         if(Display.length ===0) Display="0";}
+        if (Display !== "0" || Display.length > 0) {
+          Display = Display.slice(0, -1);
+          if (Display.length === 0) Display = "0";
+        }
         DisplayOnConsole(Display);
         break;
 
       case "+/-":
-        Display = Display[0] === "-" ? Display.slice(1) : ((Display==='0')?"0":"-" + Display);
+        Display =
+          Display[0] === "-"
+            ? Display.slice(1)
+            : Display === "0"
+            ? "0"
+            : "-" + Display;
         DisplayOnConsole(Display);
         break;
       case "=":
+        if(nextOperator)
+        {calculatorObject.operator= nextOperator;
         calculatorObject.operand2 = Number(Display);
-        calculatorObject.operation();
-        calculatorObject.operator = "=";
         Display = "" + calculatorObject.operation();
-        Display=DisplayOnConsole(Display);
+        Display = DisplayOnConsole(Display);
+        nextOperator = null;}
+       
+        break;
       case "%":
       case "/":
       case "*":
       case "-":
       case "+":
-        if(calculatorObject.isArithmetic())
-        {calculatorObject.operand2 = Number(Display);
-            Display=calculatorObject.operation();
-        calculatorObject.operator = "=";
-        Display=DisplayOnConsole(Display);}
-        calculatorObject.operator = e.target.textContent;
-        calculatorObject.operand1 = Number(Display);
+        if (nextOperator!== null) {
+          calculatorObject.operator= nextOperator;
+          calculatorObject.operand2 = Number(Display);
+          Display = ""+calculatorObject.operation();
+          nextOperator = e.target.textContent;
+           DisplayOnConsole(Display);
+           Display="0";
+        } else {
+          nextOperator = e.target.textContent;
+          calculatorObject.operand1 = Number(Display);
+          Display = "0";
+        }
+        break;
     }
   }
 });
