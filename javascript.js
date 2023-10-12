@@ -60,7 +60,9 @@ let calculatorObject = {
 };
 let Display = "0";
 
-const isNumber = (str) => Number(str) <= Number.MAX_SAFE_INTEGER;
+const isNumber = (str) => Number(str) <= Number.MAX_SAFE_INTEGER &&
+(Display.indexOf(".") === -1 ||
+  (Display +e.target.textContent).split(".")[1].length <= 9);
 const DisplayOnConsole = (display) => {
     if(display ==="Infinity" || display ==="NaN")
     {document.querySelector(".display").textContent = "Math Error"
@@ -94,9 +96,7 @@ document.querySelector(".container.f-r").addEventListener("click", (e) => {
         Display='0';
 
         if (
-          isNumber(Display + e.target.textContent) &&
-          (Display.indexOf(".") === -1 ||
-            (Display +e.target.textContent).split(".")[1].length <= 9)
+          isNumber(Display + e.target.textContent) 
         ) {
           Display = (Display === "0" ? "" : Display) + e.target.textContent;
           DisplayOnConsole(Display);
