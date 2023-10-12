@@ -49,21 +49,22 @@ let calculatorObject = {
       default:
         break;
     }
-    
-    return result;
+
+    return isNumber(result) ? result : NaN;
   },
 };
 let Display = "0";
-let nextOperator=null;
+let nextOperator = null;
 const MAX_PRECISION = 9;
 const MAX_Integer_DIGITS = 15;
 const isNumber = (str) =>
-  Number(str) <= Number.MAX_SAFE_INTEGER && str.split('.')[0].length <=MAX_Integer_DIGITS;
-const maintainMaxPrecision =(str)=>{
-if(str.indexOf('.') >-1 && str.split('.')[1].length >MAX_PRECISION)
-return str.split('.')[0]+'.'+str.split('.')[1].slice(0,9);
-return str
-}  
+  Number(str) <= Number.MAX_SAFE_INTEGER &&
+  str.split(".")[0].length <= MAX_Integer_DIGITS;
+const maintainMaxPrecision = (str) => {
+  if (str.indexOf(".") > -1 && str.split(".")[1].length > MAX_PRECISION)
+    return str.split(".")[0] + "." + str.split(".")[1].slice(0, 9);
+  return str;
+};
 const DisplayOnConsole = (display) => {
   if (display === "Infinity" || display === "NaN") {
     document.querySelector(".display").textContent = "Math Error";
@@ -78,6 +79,12 @@ const Calculate = () => {
   Display = "" + calculatorObject.operation();
   Display = DisplayOnConsole(Display);
 };
+const clear = () => {
+  Display = "0";
+  DisplayOnConsole(Display);
+  calculatorObject.destruct();
+  nextOperator = null;
+};
 document.querySelector(".container.f-r").addEventListener("click", (e) => {
   if (e.target.classList.contains("btn_display")) {
     switch (e.target.textContent) {
@@ -91,22 +98,20 @@ document.querySelector(".container.f-r").addEventListener("click", (e) => {
       case "7":
       case "8":
       case "9":
-      
-        if (isNumber(Display + e.target.textContent)) {  
-          Display = maintainMaxPrecision((Display === "0" ? "" : Display) + e.target.textContent);
+        if (isNumber(Display + e.target.textContent)) {
+          Display = maintainMaxPrecision(
+            (Display === "0" ? "" : Display) + e.target.textContent
+          );
           DisplayOnConsole(Display);
         }
-      
+
         break;
       case ".":
         Display = Display + (Display.indexOf(".") === -1 ? "." : "");
         DisplayOnConsole(Display);
         break;
       case "AC":
-        Display = "0";
-        DisplayOnConsole(Display);
-        calculatorObject.destruct();
-        nextOperator=null;
+        clear();
         break;
 
       case "DEL":
@@ -127,26 +132,27 @@ document.querySelector(".container.f-r").addEventListener("click", (e) => {
         DisplayOnConsole(Display);
         break;
       case "=":
-        if(nextOperator)
-        {calculatorObject.operator= nextOperator;
-        calculatorObject.operand2 = Number(Display);
-        Display = "" + calculatorObject.operation();
-        Display = DisplayOnConsole(Display);
-        nextOperator = null;}
-       
+        if (nextOperator) {
+          calculatorObject.operator = nextOperator;
+          calculatorObject.operand2 = Number(Display);
+          Display = "" + calculatorObject.operation();
+          Display = DisplayOnConsole(Display);
+          nextOperator = null;
+        }
+
         break;
       case "%":
       case "/":
       case "*":
       case "-":
       case "+":
-        if (nextOperator!== null) {
-          calculatorObject.operator= nextOperator;
+        if (nextOperator !== null) {
+          calculatorObject.operator = nextOperator;
           calculatorObject.operand2 = Number(Display);
-          Display = ""+calculatorObject.operation();
+          Display = "" + calculatorObject.operation();
+          DisplayOnConsole(Display);
           nextOperator = e.target.textContent;
-           DisplayOnConsole(Display);
-           Display="0";
+          Display = "0";
         } else {
           nextOperator = e.target.textContent;
           calculatorObject.operand1 = Number(Display);
