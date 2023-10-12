@@ -56,8 +56,9 @@ let calculatorObject = {
 let Display = "0";
 let nextOperator=null;
 const MAX_PRECISION = 9;
+const MAX_Integer_DIGITS = 15;
 const isNumber = (str) =>
-  Number(str) <= Number.MAX_SAFE_INTEGER ;
+  Number(str) <= Number.MAX_SAFE_INTEGER && str.split('.')[0].length <=MAX_Integer_DIGITS;
 const maintainMaxPrecision =(str)=>{
 if(str.indexOf('.') >-1 && str.split('.')[1].length >MAX_PRECISION)
 return str.split('.')[0]+'.'+str.split('.')[1].slice(0,9);
@@ -90,12 +91,12 @@ document.querySelector(".container.f-r").addEventListener("click", (e) => {
       case "7":
       case "8":
       case "9":
-        
-        if (isNumber(Display + e.target.textContent)) {
+      
+        if (isNumber(Display + e.target.textContent)) {  
           Display = maintainMaxPrecision((Display === "0" ? "" : Display) + e.target.textContent);
           DisplayOnConsole(Display);
         }
-
+      
         break;
       case ".":
         Display = Display + (Display.indexOf(".") === -1 ? "." : "");
