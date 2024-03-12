@@ -50,13 +50,15 @@ let calculatorObject = {
         break;
     }
 
-    return isNumber(result) ? result : NaN;
+    return isNumber(result + "") ? result : NaN;
   },
 };
 let Display = "0";
 let nextOperator = null;
 const MAX_PRECISION = 9;
 const MAX_Integer_DIGITS = 15;
+
+/* takes string as an argument */
 const isNumber = (str) =>
   Number(str) <= Number.MAX_SAFE_INTEGER &&
   str.split(".")[0].length <= MAX_Integer_DIGITS;
