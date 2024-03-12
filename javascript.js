@@ -131,6 +131,7 @@ document.querySelector(".container.f-r").addEventListener("click", (e) => {
             : Display === "0"
             ? "0"
             : "-" + Display;
+
         DisplayOnConsole(Display);
         break;
       case "=":
